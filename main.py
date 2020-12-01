@@ -6,6 +6,9 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMenu
 from pyqtkeybind import keybinder
 
+from note import Note
+from repositories.debug import DebugNotesRepository
+
 
 class WinEventFilter(QAbstractNativeEventFilter):
     def __init__(self, k):
@@ -19,8 +22,9 @@ class WinEventFilter(QAbstractNativeEventFilter):
 
 class QuickAddWindow(qt.QMainWindow):
 
-    def __init__(self):
+    def __init__(self, repository):
         super(QuickAddWindow, self).__init__()
+        self.repository = repository
         self.setWindowTitle("Quick Note")
 
         self.summary_edit = qt.QLineEdit()
@@ -43,8 +47,12 @@ class QuickAddWindow(qt.QMainWindow):
         self.setCentralWidget(widget)
 
     def accept(self):
-        print("Summary:", self.summary_edit.text())
-        print("Description:", self.note_edit.toPlainText())
+        note = Note(
+            summary=self.summary_edit.text(),
+            description=self.note_edit.toPlainText()
+        )
+
+        self.repository.save(note)
         self.hide()
 
     def reject(self):
@@ -53,7 +61,6 @@ class QuickAddWindow(qt.QMainWindow):
 
 def set_global_shortcut(widget: qt.QWidget, shortcut: str):
     def toggle_visibility():
-        print("visibility")
         if widget.isVisible():
             widget.hide()
         else:
@@ -64,7 +71,7 @@ def set_global_shortcut(widget: qt.QWidget, shortcut: str):
 
 def main():
     app = qt.QApplication(sys.argv)
-    window = QuickAddWindow()
+    window = QuickAddWindow(DebugNotesRepository())
 
     keybinder.init()
     set_global_shortcut(window, "Ctrl+T")
@@ -78,7 +85,7 @@ def main():
     quit_action = menu.addAction("Quit")
     quit_action.triggered.connect(app.quit)
 
-    icon = QIcon("/home/dfialho/Downloads/clipboard_task_board_taskboard-09-256.png")
+    icon = QIcon("icon.png")
     tray_icon = qt.QSystemTrayIcon(icon, parent=app)
     tray_icon.setToolTip("An amazing quick add for notion")
     tray_icon.show()
