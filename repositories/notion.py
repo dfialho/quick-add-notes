@@ -30,5 +30,8 @@ class NotionNotesRepository(NotesRepository):
         logger.info("Saving note to notion")
         row = self.db.collection.add_row()
         row.name = note.summary
-        row.children.add_new(TextBlock, title=note.description)
+
+        for line in note.description.splitlines():
+            row.children.add_new(TextBlock, title=line)
+
         logger.info(f"Note saved with summary '{note.summary}'")
