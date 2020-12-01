@@ -33,6 +33,8 @@ class QuickAddWindow(qt.QMainWindow):
         self.summary_edit.setPlaceholderText("Summary...")
         self.note_edit = qt.QTextEdit()
         self.note_edit.setPlaceholderText("Description...")
+        self.topics_combobox = qt.QComboBox()
+        self.topics_combobox.addItems(self.repository.topics())
 
         button_box = qt.QDialogButtonBox(qt.QDialogButtonBox.Ok | qt.QDialogButtonBox.Cancel)
         button_box.accepted.connect(self.accept)
@@ -41,6 +43,7 @@ class QuickAddWindow(qt.QMainWindow):
 
         main_layout = qt.QVBoxLayout()
         main_layout.addWidget(self.summary_edit)
+        main_layout.addWidget(self.topics_combobox)
         main_layout.addWidget(self.note_edit)
         main_layout.addWidget(button_box)
 
@@ -51,7 +54,8 @@ class QuickAddWindow(qt.QMainWindow):
     def accept(self):
         note = Note(
             summary=self.summary_edit.text(),
-            description=self.note_edit.toPlainText()
+            description=self.note_edit.toPlainText(),
+            topic=self.topics_combobox.currentText()
         )
 
         self.repository.save(note)

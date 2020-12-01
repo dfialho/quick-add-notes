@@ -7,3 +7,4 @@ from dataclasses_json import dataclass_json
 class Note:
     summary: str
     description: str
+    topic: str = None
