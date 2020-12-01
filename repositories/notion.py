@@ -1,4 +1,5 @@
 import logging
+from concurrent.futures.thread import ThreadPoolExecutor
 
 from notion.block import TextBlock
 from notion.client import NotionClient
@@ -20,7 +21,12 @@ class NotionNotesRepository(NotesRepository):
         logger.info("Connecting to database")
         self.db = self.client.get_collection_view(self.DB_URL)
 
+        self.executor = ThreadPoolExecutor(1)
+
     def save(self, note: Note):
+        self.executor.submit(self._save_task, note)
+
+    def _save_task(self, note: Note):
         logger.info("Saving note to notion")
         row = self.db.collection.add_row()
         row.name = note.summary
