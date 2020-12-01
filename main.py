@@ -1,3 +1,5 @@
+import logging
+import logging.config
 import sys
 
 from PyQt5 import QtWidgets as qt
@@ -76,6 +78,7 @@ def set_global_shortcut(window: QuickAddWindow, shortcut: str):
 
 
 def main():
+    logging.config.fileConfig("conf/logging.conf")
     app = qt.QApplication(sys.argv)
     window = QuickAddWindow(NotionNotesRepository(sys.argv[1]))
 

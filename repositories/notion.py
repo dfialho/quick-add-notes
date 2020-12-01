@@ -7,7 +7,7 @@ from notion.client import NotionClient
 from note import Note
 from repositories.base import NotesRepository
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 
 class NotionNotesRepository(NotesRepository):
