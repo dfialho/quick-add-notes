@@ -1,5 +1,6 @@
 import logging
 
+from notion.block import TextBlock
 from notion.client import NotionClient
 
 from note import Note
@@ -23,4 +24,5 @@ class NotionNotesRepository(NotesRepository):
         logger.info("Saving note to notion")
         row = self.db.collection.add_row()
         row.name = note.summary
+        row.children.add_new(TextBlock, title=note.description)
         logger.info(f"Note saved with summary '{note.summary}'")
