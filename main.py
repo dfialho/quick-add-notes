@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 
 from PyQt5 import QtWidgets as qt
 from PyQt5.QtCore import QAbstractNativeEventFilter, QAbstractEventDispatcher
@@ -7,7 +8,7 @@ from PyQt5.QtWidgets import QMenu
 from pyqtkeybind import keybinder
 
 from note import Note
-from repositories.debug import DebugNotesRepository
+from repositories.file import FileNotesRepository
 
 
 class WinEventFilter(QAbstractNativeEventFilter):
@@ -71,7 +72,7 @@ def set_global_shortcut(widget: qt.QWidget, shortcut: str):
 
 def main():
     app = qt.QApplication(sys.argv)
-    window = QuickAddWindow(DebugNotesRepository())
+    window = QuickAddWindow(FileNotesRepository(Path("exp/notes.json")))
 
     keybinder.init()
     set_global_shortcut(window, "Ctrl+T")
