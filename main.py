@@ -86,7 +86,7 @@ def main():
     quit_action = menu.addAction("Quit")
     quit_action.triggered.connect(app.quit)
 
-    icon = QIcon("icon.png")
+    icon = QIcon("media/icon.png")
     tray_icon = qt.QSystemTrayIcon(icon, parent=app)
     tray_icon.setToolTip("An amazing quick add for notion")
     tray_icon.show()
