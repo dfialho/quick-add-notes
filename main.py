@@ -59,15 +59,21 @@ class QuickAddWindow(qt.QMainWindow):
     def reject(self):
         self.hide()
 
+    def show(self) -> None:
+        self.summary_edit.clear()
+        self.note_edit.clear()
+        self.summary_edit.setFocus()
+        super().show()
 
-def set_global_shortcut(widget: qt.QWidget, shortcut: str):
-    def toggle_visibility():
-        if widget.isVisible():
-            widget.hide()
+    def toggle_visibility(self):
+        if self.isVisible():
+            self.reject()
         else:
-            widget.show()
+            self.show()
 
-    keybinder.register_hotkey(widget.winId(), shortcut, toggle_visibility)
+
+def set_global_shortcut(window: QuickAddWindow, shortcut: str):
+    keybinder.register_hotkey(window.winId(), shortcut, window.toggle_visibility)
 
 
 def main():
